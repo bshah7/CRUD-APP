@@ -75,7 +75,7 @@ const Crud = () => {
                             </span>
                             <Link to={'/update/${t.id}'}>
                                 <span
-                                    onClick={() => console.log("")}
+                                    
                                     className="btn btn-sm float-right"
                                  >
                                    <EditOutlined className="text-warning" />

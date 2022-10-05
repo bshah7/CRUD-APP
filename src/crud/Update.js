@@ -1,7 +1,9 @@
-import { Input } from "antd";
+//import { Input } from "antd";
 import React, {useState, useEffect} from "react";
 import {toast} from "react-toastify";
 import {updateName, getName} from "./api";
+import FormElement from "./Form";
+import Loading from "./Loading";
 
 const update = ({history, match}) => {
     const [name, setName] = useState("");
@@ -11,20 +13,35 @@ const update = ({history, match}) => {
         loadName();
     }, []);
 
-    console.log("params", match.params.id)
-    console.log("name", name)
-
     const loadName = () => {
         getName(match.params.id).then((d) => setName(d.data.name));
     };
 
-    const handleSubmit = () => {};
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        updateName(match.params.id, {name})
+            .then((res) => {
+                setLoading(false);
+                setName("");
+                toast.success('${res.data.name} is updated');
+                history.push("/");
+            })
+            .catch((err) => {
+                setLoading(false);
+                if(err.response.status === 400) toast.error(err.response.data)
+            });
+    };
     return(
         <div className="container-fluid">
             <div className="row">
                 <div className="col-md-8">
                     {loading ? <Loading /> : (<h4>Update name</h4>)}
-                    <Input handleSubmit={handleSubmit} name={name} setName={setName} />
+                    <FormElement
+                     handleSubmit={handleSubmit} 
+                     name={name} 
+                     setName={setName}
+                    />
                 </div>
             </div>
         </div>
