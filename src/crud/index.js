@@ -9,23 +9,24 @@ import {EditOutlined, DeleteOutlined} from "@ant-design/icons";
 const Crud = () => {
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
-    const [names,setNames] = useState([]);
+    const [names, setNames] = useState([]);
     
     useEffect(() => {
         loadNames();
     }, []);
 
-    console.log("process.env.REACT_APP_API", process.env.REACT_APP_API);
+    //console.log("process.env.REACT_APP_API", process.env.REACT_APP_API);
 
     const loadNames = () => getNames().then((name) => setNames(name.data));
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         createName({name})
             .then((res) => {
                 setLoading(false);
-                setName("");
-                toast.success('${res.data.name} is created');
+                setName(""); // eslint-disable-next-line
+                toast.success(name + ' is created');
                 loadNames();
             })
             .catch((err)  => {
@@ -38,8 +39,8 @@ const Crud = () => {
         if(window.confirm("Are you sure you want to delete?")) {
             setLoading(true);
             removeName(id).then((res) => {
-                setLoading(false);
-                toast.error('${name} is deleted');
+                setLoading(false); // eslint-disable-next-line
+                toast.error(name + ' is deleted');
                 loadNames();
             }).catch((err) => {
                 if (err.response.status === 400) {
@@ -49,6 +50,7 @@ const Crud = () => {
             })
         }
     }
+
 
     return (
         <div className="container-fluid">
@@ -63,7 +65,7 @@ const Crud = () => {
                         setName={setName}
                     />
                     {names && names.map((t) => (
-                        <div classNames="border row mx-2 align-items-center" key={t.id}>
+                        <div className="border row mx-2 align-items-center" key={t.id}>
                             <ul className="list-group">
                                 <li className="list-group-item">{t.name}</li>
                             </ul>
@@ -72,15 +74,17 @@ const Crud = () => {
                                 className="btn btn-sm float-right"
                             >
                                 <DeleteOutlined className="text-danger" />
-                            </span>
-                            <Link to={'/update/${t.id}'}>
-                                <span
-                                    
+                            </span> 
+                        
+                            <Link to={// eslint-disable-next-line
+                                    '/Update/' + encodeURIComponent(t.id)} >
+                                <span 
                                     className="btn btn-sm float-right"
-                                 >
-                                   <EditOutlined className="text-warning" />
+                                >
+                                    <EditOutlined className="text-warning" />
                                 </span>
-                            </Link>
+                            </Link>  
+                            
                         </div>
                     ))}
                     </>

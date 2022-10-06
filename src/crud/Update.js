@@ -4,27 +4,32 @@ import {toast} from "react-toastify";
 import {updateName, getName} from "./api";
 import FormElement from "./Form";
 import Loading from "./Loading";
+import { useParams, Link } from "react-router-dom";
+import {DatabaseOutlined} from "@ant-design/icons";
 
-const update = ({history, match}) => {
+const Update = ({history, match}) => {
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         loadName();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const { id } = useParams();
+
     const loadName = () => {
-        getName(match.params.id).then((d) => setName(d.data.name));
+        getName(id).then((d) => setName(d.data.name));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        updateName(match.params.id, {name})
+        updateName(id, {name})
             .then((res) => {
                 setLoading(false);
-                setName("");
-                toast.success('${res.data.name} is updated');
+                setName("");  // eslint-disable-next-line
+                toast.success(name + ' is updated');
                 history.push("/");
             })
             .catch((err) => {
@@ -32,6 +37,7 @@ const update = ({history, match}) => {
                 if(err.response.status === 400) toast.error(err.response.data)
             });
     };
+
     return(
         <div className="container-fluid">
             <div className="row">
@@ -42,8 +48,19 @@ const update = ({history, match}) => {
                      name={name} 
                      setName={setName}
                     />
+                    <Link to={// eslint-disable-next-line
+                                '/'} >
+                            <span 
+                                className="btn btn-sm float-right"
+                            >
+                            <DatabaseOutlined className="text-warning"/>
+                            
+                            </span>
+                    </Link>
                 </div>
             </div>
         </div>
     )
 };
+
+export default Update;

@@ -1,21 +1,28 @@
 import axios from "axios";
 
 export const getNames = async () => {
-    return await axios.get('${process.env.REACT_APP_API}');
+    // eslint-disable-next-line
+    return await axios.get('http://localhost:5000/data');
 };
 
 export const createName = async (name) => {
-    return await axios.post('${process.env.REACT_APP_API}', name)
+    // eslint-disable-next-line
+    return await axios.post('http://localhost:5000/data', name);
 };
 
 export const getName = async (id) => {
-    return await axios.get('${process.env.React_APP_API}/${id}');
+    // eslint-disable-next-line
+    return await axios.get('http://localhost:5000/data/' + encodeURIComponent(id));
 };
 
 export const removeName = async (id) => {
-    return await axios.delete('${process.env.React_APP_API}/${id}');
+    // eslint-disable-next-line
+    return await axios.delete('http://localhost:5000/data/' + encodeURIComponent(id));
 };
 
 export const updateName = async (id, name) => {
-    return await axios.put('${process.env.React_APP_API}/${id}', name);
+    let aLink = 'http://localhost:5000/data/' + encodeURIComponent(id)
+    // eslint-disable-next-line
+    return await axios.put(aLink, name);
 };
+
